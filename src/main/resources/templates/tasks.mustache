@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+</head>
+<body>
+    <div>
+        <form action="/logout" method="post">
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+    <div>
+        <h2>Создать новую задачу</h2>
+        <form method="post" action="newTask">
+            <input type="text" name="taskName" placeholder="Введите имя задачи" />
+            <input type="text" name="description" placeholder="Введите описание задачи"/>
+            <input type="text" name="status" placeholder="Введите статус задачи"/>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+            <button type="submit">Создать</button>
+        </form>
+    </div>
+
+    <h4>Фильтр</h4>
+    <form method="post" action="filter">
+        <input type="text" name="filter">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+        <button type="submit">Найти</button>
+    </form>
+
+    <h2>Список задач</h2>
+    {{#tasks}}
+        <div>
+            <span>{{taskName}}</span>
+            <strong>{{status}}</strong>
+            <i>{{startDate}}</i>
+        </div>
+    {{/tasks}}
+</body>
+</html>

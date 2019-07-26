@@ -12,10 +12,6 @@ public class Issue{
     private String issueName;
     private String description;
     private Date startDate;
-
-//    @ElementCollection(targetClass = Status.class, fetch = FetchType.EAGER)
-//    @CollectionTable(name = "issue_status", joinColumns = @JoinColumn(name = "issue_id"))
-//    @Enumerated(EnumType.STRING)
     private Status status;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -79,7 +75,7 @@ public class Issue{
     }
 
     public Status getStatus() {
-        return status != null ? status : Status.CREATED;
+        return status != null ? status : Status.CLOSED;
     }
 
     public void setStatus(Status status) {

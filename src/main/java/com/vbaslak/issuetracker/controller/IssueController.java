@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,12 +36,9 @@ public class IssueController {
         return "redirect:/main";
     }
 
-    @GetMapping("/issue")
-    public String ChangeIssue(@RequestParam(name = "issue") String issueName, Model model) {
-        Issue issue = issueRepository.findByIssueNameEquals(issueName);
+    @GetMapping("/issue/{issue}")
+    public String ChangeIssue(@PathVariable Issue issue, Model model) {
         model.addAttribute("issue", issue);
         return "changeIssue";
     }
-
-
 }

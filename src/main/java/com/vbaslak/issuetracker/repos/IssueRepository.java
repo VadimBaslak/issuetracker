@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IssueRepository extends CrudRepository<Issue, Long> {
     List<Issue> findByIssueName(String issueName);
+    Issue findByIssueNameEquals(String issueName);
 }

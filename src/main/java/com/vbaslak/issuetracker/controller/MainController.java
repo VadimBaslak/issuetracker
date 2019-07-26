@@ -42,20 +42,8 @@ public class MainController {
         return "main";
     }
 
-    @GetMapping("/newIssue")
-    public String newIssue(){
-        return "newIssue";
-    }
 
-    @PostMapping("/newIssue")
-    public String add(
-            @AuthenticationPrincipal User user,
-            @RequestParam String issueName,
-            @RequestParam String description,
-            Map<String, Object> model
-    ){
-        Issue issue = new Issue(issueName, user, description);
-        issueRepository.save(issue);
-        return "redirect:/main";
-    }
+
+
+
 }

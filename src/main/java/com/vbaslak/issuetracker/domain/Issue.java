@@ -4,18 +4,24 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Issue {
+public class Issue{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
+
     private String issueName;
     private String description;
-    private Status status;
     private Date startDate;
+
+//    @ElementCollection(targetClass = Status.class, fetch = FetchType.EAGER)
+//    @CollectionTable(name = "issue_status", joinColumns = @JoinColumn(name = "issue_id"))
+//    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User author;
+
     //    private List<Comment> comments = new ArrayList<Comment>();
 
     public Issue() {}
@@ -25,18 +31,18 @@ public class Issue {
         this.author = user;
         this.description = description;
         this.startDate = new Date();
-        //this.status = Status.CREATED;
+        this.status = Status.CREATED;
     }
 
     public String getAuthorName(){
         return author != null ? author.getUsername() : "<none>";
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,7 +69,6 @@ public class Issue {
     public void setAuthor(User author) {
         this.author = author;
     }
-
 
     public Date getStartDate() {
         return startDate != null ? startDate : new Date();

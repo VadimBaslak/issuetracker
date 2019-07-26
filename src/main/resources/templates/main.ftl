@@ -17,7 +17,7 @@
     <h2>Список задач</h2>
     <#list issues as issue>
         <div>
-            <a href="/changeIssue"><span>${issue.issueName}</span></a>
+            <a href="issue?issue=${issue.issueName}"><span>${issue.issueName}</span></a>
             <strong>${issue.status}</strong>
             <span>${issue.startDate}</span>
         </div>

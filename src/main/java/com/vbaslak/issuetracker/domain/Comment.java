@@ -1,12 +1,23 @@
 package com.vbaslak.issuetracker.domain;
 
+import net.bytebuddy.implementation.bind.annotation.Empty;
+
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "comment")
 public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     private Status status;
     private Date date;
     private User user;
-    private String string;
+    private String comment;
+
+    private Issue issue;
+
 
     public Comment(){}
 
@@ -14,7 +25,7 @@ public class Comment {
         this.status = Status.valueOf(status);
         this.date = new Date();
         this.user = user;
-        this.string = string;
+        this.comment = string;
     }
 
     public String getStatus() {
@@ -41,11 +52,31 @@ public class Comment {
         this.user = user;
     }
 
-    public String getString() {
-        return string;
+    public Integer getId() {
+        return id;
     }
 
-    public void setString(String string) {
-        this.string = string;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getString() {
+        return comment;
+    }
+
+    public void setString(String comment) {
+        this.comment = comment;
     }
 }

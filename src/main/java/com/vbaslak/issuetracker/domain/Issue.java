@@ -1,17 +1,14 @@
 package com.vbaslak.issuetracker.domain;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
-public class Task {
+public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String taskName;
+    private String issueName;
     private String description;
     private Status status;
     private Date startDate;
@@ -21,14 +18,14 @@ public class Task {
     private User author;
     //    private List<Comment> comments = new ArrayList<Comment>();
 
-    public Task() {}
+    public Issue() {}
 
-    public Task(String name, User user, String description) {
-        this.taskName = name;
+    public Issue(String name, User user, String description) {
+        this.issueName = name;
         this.author = user;
         this.description = description;
         this.startDate = new Date();
- //       this.status = Status.CREATED;
+        //this.status = Status.CREATED;
     }
 
     public String getAuthorName(){
@@ -43,12 +40,12 @@ public class Task {
         this.id = id;
     }
 
-    public String getTaskName() {
-        return taskName;
+    public String getIssueName() {
+        return issueName;
     }
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
+    public void setIssueName(String issueName) {
+        this.issueName = issueName;
     }
 
     public String getDescription() {

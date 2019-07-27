@@ -4,39 +4,41 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Issue {
+public class Issue{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
+
     private String issueName;
     private String description;
-    private Status status;
     private Date startDate;
+    private String status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User author;
     //    private List<Comment> comments = new ArrayList<Comment>();
 
-    public Issue() {}
+    public Issue() {
+    }
 
     public Issue(String name, User user, String description) {
         this.issueName = name;
         this.author = user;
         this.description = description;
         this.startDate = new Date();
-        //this.status = Status.CREATED;
+        this.status = Status.CREATED.getStatus();
     }
 
     public String getAuthorName(){
         return author != null ? author.getUsername() : "<none>";
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -64,7 +66,6 @@ public class Issue {
         this.author = author;
     }
 
-
     public Date getStartDate() {
         return startDate != null ? startDate : new Date();
     }
@@ -73,22 +74,11 @@ public class Issue {
         this.startDate = new Date();
     }
 
-    public Status getStatus() {
-        return status != null ? status : Status.CREATED;
+    public String getStatus() {
+        return status != null ? status : Status.CLOSED.getStatus();
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
-
-//    private static Set<String> set = Arrays.asList(Status.values())
-//            .stream().map(s -> s.name()).collect(Collectors.toSet());
-//
-//    public static String getStatusString(String status) {
-//        try {
-//            return Status.valueOf(status).name();
-//        } catch (IllegalArgumentException e) {
-//            return "INVALID_STATUS";
-//        }
-//    }
 }

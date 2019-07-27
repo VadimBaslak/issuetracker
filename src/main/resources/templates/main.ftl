@@ -15,13 +15,24 @@
     </form>
 
     <h2>Список задач</h2>
-    <#list issues as issue>
-        <div>
-            <a href="/changeIssue"><span>${issue.issueName}</span></a>
-            <strong>${issue.status}</strong>
-            <span>${issue.startDate}</span>
-        </div>
-    <#else>
-        No issue
-    </#list>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list issues as issue>
+            <tr>
+                <td><a href="/issue/${issue.id}"><span>${issue.issueName}</span></a></td>
+                <td><strong>${issue.status}</strong></td>
+                <td><span>${issue.startDate}</span></td>
+            </tr>
+        <#else>
+            No issue
+        </#list>
+        </tbody>
+    </table>
 </@c.page>

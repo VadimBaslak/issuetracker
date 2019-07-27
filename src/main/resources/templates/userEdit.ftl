@@ -2,7 +2,6 @@
 
 <@c.page>
     <h2>Редактор пользователя</h2>
-
     <form action="/user" method="post">
         <input type="text" name="username" value="${user.username}">
         <#list roles as role>

@@ -1,16 +1,23 @@
 package com.vbaslak.issuetracker.domain;
 
-import org.springframework.security.core.GrantedAuthority;
+public enum Status {
+    CREATED("created"),
+    IN_PROGRESS("in progress"),
+    RESOLVED("resolved"),
+    CLOSED("closed");
 
-public enum Status implements GrantedAuthority {
-    CREATED,
-    IN_PROGRESS,
-    RESOLVED,
-    CLOSED;
+    private String status;
 
-    @Override
-    public String getAuthority() {
-        return name();
+    Status(String status){
+        this.status = status;
+    }
+
+    public String getStatus(){
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 

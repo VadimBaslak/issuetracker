@@ -1,6 +1,7 @@
 package com.vbaslak.issuetracker.controller;
 
 import com.vbaslak.issuetracker.domain.Issue;
+import com.vbaslak.issuetracker.domain.Status;
 import com.vbaslak.issuetracker.domain.User;
 import com.vbaslak.issuetracker.repos.IssueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -38,7 +42,19 @@ public class IssueController {
 
     @GetMapping("/issue/{issue}")
     public String ChangeIssue(@PathVariable Issue issue, Model model) {
+        List<Status> statusList = new ArrayList<Status>(Arrays.asList(Status.values()));
         model.addAttribute("issue", issue);
+        model.addAttribute("statusList", statusList);
         return "changeIssue";
+    }
+
+    @PostMapping("/issue")
+    public String statusSave(
+            @RequestParam("status") String status,
+            @RequestParam("issueId") Issue issue
+    ){
+        issue.setStatus(status);
+        issueRepository.save(issue);
+        return "redirect:/main";
     }
 }

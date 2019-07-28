@@ -3,18 +3,27 @@ package com.vbaslak.issuetracker.controller;
 import com.vbaslak.issuetracker.domain.Role;
 import com.vbaslak.issuetracker.domain.User;
 import com.vbaslak.issuetracker.repos.UserRepository;
+import com.vbaslak.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Map;
 
 @Controller
 public class RegistrationController {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+
+
 
     @GetMapping("/registration")
     public String registration(){
@@ -23,18 +32,29 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(
-            User user,
-            Map<String, Object> model
+            @RequestParam("password2") String passwordConfirm,
+            @Valid User user,
+            BindingResult bindingResult,
+            Model model
     ) {
-        User userFromDb = userRepository.findByUsername(user.getUsername());
-        if (userFromDb != null) {
-            model.put("message", userFromDb.getUsername() + " exists!");
+        boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
+
+        if (user.getPassword() != null && !user.getPassword().equals(passwordConfirm)) {
+            model.addAttribute("passwordError", "Passwords are different!");
+        }
+
+        if (isConfirmEmpty || bindingResult.hasErrors()) {
+            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
+
+            model.mergeAttributes(errors);
+
             return "registration";
         }
 
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        userRepository.save(user);
+        if (!userService.addUser(user)) {
+            model.addAttribute("usernameError", user.getUsername() + " exists!");
+            return "registration";
+        }
 
         return "redirect:/login";
     }

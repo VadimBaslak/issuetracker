@@ -11,16 +11,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 public class IssueController {
@@ -40,30 +44,38 @@ public class IssueController {
     @PostMapping("/newIssue")
     public String add(
             @AuthenticationPrincipal User user,
-            @RequestParam String issueName,
-            @RequestParam String description,
-            Map<String, Object> model,
+            @Valid Issue issue,
+            BindingResult bindingResult,
+            Model model,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
-        Issue issue = new Issue(issueName, user, description);
+        issue.setAuthor(user);
+        issue.setStartDate(new Date());
+        issue.setStatus(Status.CREATED.getStatus());
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("issue", issue);
+            return "newIssue";
+        } else {
+            if (file != null && !file.getOriginalFilename().isEmpty()) {
+                File uploadDir = new File(uploadPath);
 
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdir();
+                }
+                String uuidFile = UUID.randomUUID().toString();
+                String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+                file.transferTo(new File(uploadPath + "/" + resultFilename));
+
+                issue.setFilename(resultFilename);
+
             }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            issue.setFilename(resultFilename);
+            model.addAttribute("issue", null);
+            issueRepository.save(issue);
+            return "redirect:/issues";
         }
-
-        issueRepository.save(issue);
-        return "redirect:/issues";
     }
 
 

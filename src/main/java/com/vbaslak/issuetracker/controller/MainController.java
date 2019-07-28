@@ -35,8 +35,8 @@ public class MainController {
         } else {
             issuesN = issueRepository.findAll();
         }
-        //The List has been added so that the issues that were changed were at the top of the list.
-        //No solution has yet been found without an additional entity.
+        /*Later: The List has been added so that the issues that were changed were at the top of the list.
+        No solution has yet been found without an additional entity.*/
         List<Issue> issues = new ArrayList<>();
         Collections.reverse(issues);
         for (Issue issue: issuesN) {

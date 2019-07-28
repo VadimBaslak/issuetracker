@@ -1,5 +1,4 @@
 <#import "parts/common.ftl" as c>
 <@c.page>
-    <h1>Пользователь, добрый день! Добро пожаловать на Issue Tracker</h1>
-    <a href="/main"><h2>Перейти к списку задач</h2></a>
+    <h2>Hello, guest. Welcome to Issue Tracker </h2>
 </@c.page>

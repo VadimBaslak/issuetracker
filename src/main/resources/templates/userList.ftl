@@ -1,12 +1,12 @@
 <#import "parts/common.ftl" as c>
 <@c.page>
-    <h2>Список пользователей</h2>
-    <table>
+    <table class="table table-striped table-sm">
+        <caption>User list</caption>
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Role</th>
-            <th></th>
+            <th scope="col">Name</th>
+            <th scope="col">Role</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>

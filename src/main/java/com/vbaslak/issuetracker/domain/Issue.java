@@ -14,18 +14,20 @@ public class Issue{
     private Date startDate;
     private String status;
 
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User author;
-    //    private List<Comment> comments = new ArrayList<Comment>();
 
-    public Issue() {
-    }
+    private String filename;
+
+    public Issue() {}
 
     public Issue(String name, User user, String description) {
         this.issueName = name;
         this.author = user;
         this.description = description;
+
         this.startDate = new Date();
         this.status = Status.CREATED.getStatus();
     }
@@ -80,5 +82,13 @@ public class Issue{
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

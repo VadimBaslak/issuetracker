@@ -1,8 +1,10 @@
 package com.vbaslak.issuetracker.controller;
 
+import com.vbaslak.issuetracker.domain.Comment;
 import com.vbaslak.issuetracker.domain.Issue;
 import com.vbaslak.issuetracker.domain.Status;
 import com.vbaslak.issuetracker.domain.User;
+import com.vbaslak.issuetracker.repos.CommentRepository;
 import com.vbaslak.issuetracker.repos.IssueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +26,8 @@ import java.util.UUID;
 public class IssueController {
     @Autowired
     private IssueRepository issueRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -62,21 +66,33 @@ public class IssueController {
         return "redirect:/issues";
     }
 
+
+
     @GetMapping("/issue/{issue}")
-    public String ChangeIssue(@PathVariable Issue issue, Model model) {
+    public String ChangeIssue(
+            @PathVariable Issue issue,
+            Model model
+    ) {
         List<Status> statusList = new ArrayList<Status>(Arrays.asList(Status.values()));
+        Set<Comment> comments = issue.getComments();
+
         model.addAttribute("issue", issue);
         model.addAttribute("statusList", statusList);
+        model.addAttribute("comments", comments);
         return "changeIssue";
     }
 
     @PostMapping("/issue")
     public String statusSave(
+            @AuthenticationPrincipal User user,
             @RequestParam("status") String status,
+            @RequestParam("textComment") String textComment,
             @RequestParam("issueId") Issue issue
     ){
         issue.setStatus(status);
+        Comment comment = new Comment(issue.getStatus(), textComment, user, issue);
         issueRepository.save(issue);
+        commentRepository.save(comment);
         return "redirect:/issues";
     }
 }

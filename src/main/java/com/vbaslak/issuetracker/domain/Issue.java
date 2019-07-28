@@ -2,6 +2,8 @@ package com.vbaslak.issuetracker.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Issue{
@@ -21,6 +23,9 @@ public class Issue{
 
     private String filename;
 
+    @OneToMany(mappedBy = "issueWithComments", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Comment> comments;
+
     public Issue() {}
 
     public Issue(String name, User user, String description) {
@@ -30,6 +35,11 @@ public class Issue{
 
         this.startDate = new Date();
         this.status = Status.CREATED.getStatus();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public String getAuthorName(){
@@ -90,5 +100,13 @@ public class Issue{
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }

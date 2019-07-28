@@ -6,54 +6,32 @@
 //import java.util.Date;
 //
 //@Entity
-//@Table(name = "comment")
 //public class Comment {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(name = "ID_COMMENT", nullable = false)
 //    private Integer id;
 //
-//    private Status status;
-//    private Date date;
-//    private User user;
+//    private String status;
+//    private Date dateComment;
 //    private String comment;
 //
 //    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "")
-//    private Issue issue;
+//    @JoinColumn(name = "user_id")
+//    private User commentAuthor;
 //
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "issue_id")
+//    private Issue issueWithComments;
 //
 //    public Comment(){}
 //
-//    public Comment(String status, User user, String string) {
-//        this.status = Status.valueOf(status);
-//        this.date = new Date();
-//        this.user = user;
-//        this.comment = string;
-//    }
+//    public Comment(String status, String comment, User commentAuthor, Issue issueWithComments) {
+//        this.status = status;
+//        this.comment = comment;
+//        this.commentAuthor = commentAuthor;
+//        this.issueWithComments = issueWithComments;
 //
-//    public String getStatus() {
-//        return status.name();
-//    }
-//
-//    public void setStatus(String status) {
-//        this.status = Status.valueOf(status);
-//    }
-//
-//    public Date getData() {
-//        return date;
-//    }
-//
-//    public void setData(Date data) {
-//        this.date = data;
-//    }
-//
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
+//        this.dateComment = new Date();
 //    }
 //
 //    public Integer getId() {
@@ -64,23 +42,43 @@
 //        this.id = id;
 //    }
 //
-//    public void setStatus(Status status) {
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
 //        this.status = status;
 //    }
 //
-//    public Date getDate() {
-//        return date;
+//    public Date getDateComment() {
+//        return dateComment;
 //    }
 //
-//    public void setDate(Date date) {
-//        this.date = date;
+//    public void setDateComment(Date dateComment) {
+//        this.dateComment = dateComment;
 //    }
 //
-//    public String getString() {
+//    public String getComment() {
 //        return comment;
 //    }
 //
-//    public void setString(String comment) {
+//    public void setComment(String comment) {
 //        this.comment = comment;
+//    }
+//
+//    public User getCommentAuthor() {
+//        return commentAuthor;
+//    }
+//
+//    public void setCommentAuthor(User commentAuthor) {
+//        this.commentAuthor = commentAuthor;
+//    }
+//
+//    public Issue getIssueWithComments() {
+//        return issueWithComments;
+//    }
+//
+//    public void setIssueWithComments(Issue issueWithComments) {
+//        this.issueWithComments = issueWithComments;
 //    }
 //}

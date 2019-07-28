@@ -6,3 +6,7 @@ Opportunities:
 3. Filter by name or task status.
 
 Launch the application and go to the website: http://localhost:8080/
+
+Preparation for work:
+1. Create a database and set application.properties (url, upload.path)
+2. For Mac: in MvcConfig in addResourceHandlers replace "file:/" with "file://"

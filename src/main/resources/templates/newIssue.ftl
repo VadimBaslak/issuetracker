@@ -1,13 +1,25 @@
 <#import "parts/common.ftl" as c>
 
 <@c.page>
-    <div>
-        <h2>Создать новую задачу</h2>
-        <form action="/newIssue" method="post">
-            <input type="text" name="issueName" placeholder="Введите имя задачи" />
-            <input type="text" name="description" placeholder="Введите описание задачи"/>
+    <h2>Create a new issue</h2>
+    <div class="form-group mt-3">
+        <form action="/newIssue" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="text" name="issueName" class="form-control" placeholder="Issue name"/>
+            </div>
+            <div class="form-group">
+                <input type="text" name="description" class="form-control" placeholder="Description"/>
+            </div>
+            <div class="form-group">
+                <div class="custom-file">
+                    <input type="file" name="file" id="customFile">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+            </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}" />
-            <button type="submit">Создать</button>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
         </form>
     </div>
 </@c.page>

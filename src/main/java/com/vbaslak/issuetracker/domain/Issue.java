@@ -1,6 +1,9 @@
 package com.vbaslak.issuetracker.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -11,7 +14,11 @@ public class Issue{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "Please fill the Issue name")
+    @Length(max = 255, message = "description too long (more than 255)")
     private String issueName;
+    @NotBlank(message = "Please fill the description")
+    @Length(max = 2048, message = "description too long (more than 2kB)")
     private String description;
     private Date startDate;
     private String status;
@@ -87,7 +94,7 @@ public class Issue{
     }
 
     public String getStatus() {
-        return status != null ? status : Status.CLOSED.getStatus();
+        return status != null ? status : Status.CREATED.getStatus();
     }
 
     public void setStatus(String status) {

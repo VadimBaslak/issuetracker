@@ -5,10 +5,22 @@
     <div class="form-group mt-3">
         <form action="/newIssue" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <input type="text" name="issueName" class="form-control" placeholder="Issue name"/>
+                <input type="text" class="form-control ${(issueNameError??)?string('is-invalid', '')}"
+                       value="<#if issue??>${issue.issueName}</#if>" name="issueName" placeholder="Issue name"/>
+                <#if issueNameError??>
+                    <div class="invalid-feedback">
+                        ${issueNameError}
+                    </div>
+                </#if>
             </div>
             <div class="form-group">
-                <input type="text" name="description" class="form-control" placeholder="Description"/>
+                <input type="text" class="form-control ${(descriptionError??)?string('is-invalid', '')}"
+                       value="<#if issue??>${issue.description}</#if>"name="description" placeholder="Description"/>
+                <#if descriptionError??>
+                    <div class="invalid-feedback">
+                        ${descriptionError}
+                    </div>
+                </#if>
             </div>
             <div class="form-group">
                 <div class="custom-file">

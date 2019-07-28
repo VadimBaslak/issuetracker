@@ -10,3 +10,5 @@ Launch the application and go to the website: http://localhost:8080/
 Preparation for work:
 1. Create a database and set application.properties (url, upload.path)
 2. For Mac: in MvcConfig in addResourceHandlers replace "file:/" with "file://"
+
+UserAdmin: 'ADMIN'; Password: '123'

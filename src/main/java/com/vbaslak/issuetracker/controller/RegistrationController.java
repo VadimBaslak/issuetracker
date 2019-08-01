@@ -1,11 +1,8 @@
 package com.vbaslak.issuetracker.controller;
 
-import com.vbaslak.issuetracker.domain.Role;
 import com.vbaslak.issuetracker.domain.User;
-import com.vbaslak.issuetracker.repos.UserRepository;
 import com.vbaslak.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.Map;
 
 @Controller

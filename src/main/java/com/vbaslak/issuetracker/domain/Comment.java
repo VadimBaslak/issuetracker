@@ -1,10 +1,6 @@
 package com.vbaslak.issuetracker.domain;
 
-import net.bytebuddy.implementation.bind.annotation.Empty;
-import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity

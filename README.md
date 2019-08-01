@@ -8,5 +8,11 @@ Opportunities:
 Launch the application and go to the website: http://localhost:8080/
 
 Preparation for work:
+
 1. Create a database and set application.properties (url, upload.path)
-2. For Mac: in MvcConfig in addResourceHandlers replace "file:/" with "file://"
+2. UserAdmin: 'ADMIN'; Password: '123'
+3. Launch the application and go to the website: http://localhost:8080/
+
+Improvements continue (pagination, optimization)
+
+Used technologies: Java, Maven, Spring Boot MVC, Freemarker, Bootstrap, PostgreSQL, FlyWay.

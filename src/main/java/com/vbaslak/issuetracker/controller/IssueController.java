@@ -67,7 +67,6 @@ public class IssueController {
                 file.transferTo(new File(uploadPath + "/" + resultFilename));
 
                 issue.setFilename(resultFilename);
-
             }
             model.addAttribute("issue", null);
             issueRepository.save(issue);

@@ -3,6 +3,7 @@ package com.vbaslak.issuetracker.controller;
 import com.vbaslak.issuetracker.domain.Issue;
 import com.vbaslak.issuetracker.repos.IssueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,6 @@ public class MainController {
             @RequestParam(required = false, defaultValue = "") String filter,
             Model model
     ) {
-
         List<Issue> issues;
         if(filter != null && !filter.isEmpty()) {
             issues = issueRepository.findByIssueName(filter);

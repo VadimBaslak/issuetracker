@@ -60,6 +60,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void updateProfile(User user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
         if (!StringUtils.isEmpty(password)){
             user.setPassword(password);
         }

@@ -19,8 +19,6 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
-
-
     @GetMapping("/registration")
     public String registration(){
         return "registration";

@@ -61,7 +61,6 @@ public class UserController {
             @AuthenticationPrincipal User user,
             @RequestParam String password
     ) {
-        user.setPassword(passwordEncoder.encode(password));
         userService.updateProfile(user, passwordEncoder.encode(password));
         return "redirect:/login";
     }

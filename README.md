@@ -7,10 +7,10 @@ Opportunities:
 
 
 Preparation for work:
+
 1. Create a database and set application.properties (url, upload.path)
-2. For Mac: in MvcConfig in addResourceHandlers replace "file:/" with "file://"
-3. UserAdmin: 'ADMIN'; Password: '123'
-4. Launch the application and go to the website: http://localhost:8080/
+2. UserAdmin: 'ADMIN'; Password: '123'
+3. Launch the application and go to the website: http://localhost:8080/
 
 Improvements continue (pagination, optimization)
 

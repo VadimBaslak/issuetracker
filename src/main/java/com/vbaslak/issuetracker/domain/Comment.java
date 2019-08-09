@@ -1,6 +1,9 @@
 package com.vbaslak.issuetracker.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
@@ -8,9 +11,8 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-//    Later
-//    @NotBlank(message = "Please fill out a text comment")
-//    @Length(max = 2048, message = "description too long (more than 2kB)")
+    @NotBlank(message = "Please fill out a text comment")
+    @Length(max = 2048, message = "description too long (more than 2kB)")
     private String textComment;
     private String status;
     private Date dateComment;

@@ -3,6 +3,6 @@
 
 <@c.page>
     <h2>Hello, new user</h2>
-    <@l.login "/registration" "Sign up" true/>
+    <@l.login "/registration" "Sign up" true />
     ${message?ifExists}
 </@c.page>

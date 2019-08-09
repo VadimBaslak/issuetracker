@@ -7,5 +7,5 @@
             ${Session.SPRING_SECURITY_LAST_EXCEPTION.message}
         </div>
     </#if>
-    <@l.login "/login" "LOG IN" false/>
+    <@l.login "/login" "LOG IN" false />
 </@c.page>

@@ -4,10 +4,15 @@ import com.vbaslak.issuetracker.domain.Comment;
 import com.vbaslak.issuetracker.domain.Issue;
 import com.vbaslak.issuetracker.domain.Status;
 import com.vbaslak.issuetracker.domain.User;
-import com.vbaslak.issuetracker.repos.CommentRepository;
-import com.vbaslak.issuetracker.repos.IssueRepository;
+import com.vbaslak.issuetracker.repository.CommentRepository;
+import com.vbaslak.issuetracker.repository.IssueRepository;
+import com.vbaslak.issuetracker.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,12 +31,28 @@ import java.util.*;
 @Controller
 public class IssueController {
     @Autowired
-    private IssueRepository issueRepository;
-    @Autowired
-    private CommentRepository commentRepository;
+    private IssueService issueService;
 
     @Value("${upload.path}")
     private String uploadPath;
+
+    @GetMapping("/")
+    public String homePage() {
+        return "homePage";
+    }
+
+    @GetMapping("/issueList")
+    public String issueList(
+            @RequestParam(required = false, defaultValue = "") String filter,
+            Model model,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<Issue> page = issueService.getPageIssue(filter, pageable);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/issueList");
+        model.addAttribute("filter", filter);
+        return "issueList";
+    }
 
     @GetMapping("/newIssue")
     public String newIssue(){
@@ -39,68 +60,51 @@ public class IssueController {
     }
 
     @PostMapping("/newIssue")
-    public String add(
+    public String createNewIssue(
             @AuthenticationPrincipal User user,
             @Valid Issue issue,
             BindingResult bindingResult,
             Model model,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
-        issue.setAuthor(user);
-        issue.setStartDate(new Date());
-        issue.setStatus(Status.CREATED.getStatus());
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errorsMap);
             model.addAttribute("issue", issue);
             return "newIssue";
-        } else {
-            if (file != null && !file.getOriginalFilename().isEmpty()) {
-                File uploadDir = new File(uploadPath);
-
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-                String uuidFile = UUID.randomUUID().toString();
-                String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-                file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-                issue.setFilename(resultFilename);
-            }
-            model.addAttribute("issue", null);
-            issueRepository.save(issue);
-            return "redirect:/issues";
         }
+        model.addAttribute("issue", null);
+        issueService.saveIssue(user, issue, file);
+        return "redirect:/issueList";
     }
 
-
-
     @GetMapping("/issue/{issue}")
-    public String ChangeIssue(
+    public String showIssueDetails(
             @PathVariable Issue issue,
             Model model
     ) {
         List<Status> statusList = new ArrayList<Status>(Arrays.asList(Status.values()));
         Set<Comment> comments = issue.getComments();
-
         model.addAttribute("issue", issue);
         model.addAttribute("statusList", statusList);
         model.addAttribute("comments", comments);
-        return "changeIssue";
+        return "addCommentIssue";
     }
 
     @PostMapping("/issue")
-    public String statusSave(
+    public String createIssueStatus(
             @AuthenticationPrincipal User user,
-            @RequestParam("status") String status,
-            @RequestParam("textComment") String textComment,
+            @Valid Comment comment,
+            BindingResult bindingResult,
+            Model model,
             @RequestParam("issueId") Issue issue
     ){
-        issue.setStatus(status);
-        Comment comment = new Comment(issue.getStatus(), textComment, user, issue);
-        issueRepository.save(issue);
-        commentRepository.save(comment);
-        return "redirect:/issues";
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
+            model.mergeAttributes(errors);
+            return showIssueDetails(issue, model);
+        }
+        issueService.saveStatus(user, comment, issue);
+        return "redirect:/issueList";
     }
 }

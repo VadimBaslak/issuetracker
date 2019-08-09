@@ -1,4 +1,4 @@
-package com.vbaslak.issuetracker.repos;
+package com.vbaslak.issuetracker.repository;
 
 import com.vbaslak.issuetracker.domain.Comment;
 import org.springframework.data.repository.CrudRepository;

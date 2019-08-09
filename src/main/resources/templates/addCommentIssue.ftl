@@ -36,9 +36,15 @@
                             <option name="status">${status.getStatus()}</option>
                         </#list>
                     </select>
-                    <input type="text" name="textComment" class="form-control mt-2 mb-2" placeholder="Comment text">
-                    <input type="hidden" name="issueId" value="${issue.id}">
-                    <input type="hidden" name="_csrf" value="${_csrf.token}">
+                    <input type="text" class="form-control mt-2 mb-2 ${(textCommentError??)?string('is-invalid', '')}"
+                           value="<#if comment??></#if> "name="textComment" placeholder="Comment text" />
+                    <#if textCommentError??>
+                        <div class="invalid-feedback">
+                            ${textCommentError}
+                        </div>
+                    </#if>
+                    <input type="hidden" name="issueId" value="${issue.id}" />
+                    <input type="hidden" name="_csrf" value="${_csrf.token}" />
                     <button type="submit" class="btn btn-primary mt-2">Add</button>
                 </form>
             </div>

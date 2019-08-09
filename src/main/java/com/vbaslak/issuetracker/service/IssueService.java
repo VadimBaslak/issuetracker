@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -30,11 +29,10 @@ public class IssueService {
     private String uploadPath;
 
     public Page<Issue> getPageIssue(String filter, Pageable pageable){
-        Page<Issue> page;
         if(filter != null && !filter.isEmpty()) {
-            return page = issueRepository.findByIssueName(filter, pageable);
+            return issueRepository.findByIssueName(filter, pageable);
         } else {
-            return page = issueRepository.findAll(pageable);
+            return issueRepository.findAll(pageable);
         }
     }
 

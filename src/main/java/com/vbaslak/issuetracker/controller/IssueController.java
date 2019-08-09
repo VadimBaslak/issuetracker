@@ -4,8 +4,6 @@ import com.vbaslak.issuetracker.domain.Comment;
 import com.vbaslak.issuetracker.domain.Issue;
 import com.vbaslak.issuetracker.domain.Status;
 import com.vbaslak.issuetracker.domain.User;
-import com.vbaslak.issuetracker.repository.CommentRepository;
-import com.vbaslak.issuetracker.repository.IssueRepository;
 import com.vbaslak.issuetracker.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 

@@ -6,7 +6,7 @@
         <form action="/newIssue" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <input type="text" class="form-control ${(issueNameError??)?string('is-invalid', '')}"
-                       value="<#if issue??>${issue.issueName}</#if>" name="issueName" placeholder="Issue name"/>
+                       value="<#if issue??>${issue.issueName}</#if>" name="issueName" placeholder="Issue name" />
                 <#if issueNameError??>
                     <div class="invalid-feedback">
                         ${issueNameError}
@@ -15,7 +15,7 @@
             </div>
             <div class="form-group">
                 <input type="text" class="form-control ${(descriptionError??)?string('is-invalid', '')}"
-                       value="<#if issue??>${issue.description}</#if>"name="description" placeholder="Description"/>
+                       value="<#if issue??>${issue.description}</#if>"name="description" placeholder="Description" />
                 <#if descriptionError??>
                     <div class="invalid-feedback">
                         ${descriptionError}
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <div class="custom-file">
-                    <input type="file" name="file" id="customFile">
+                    <input type="file" name="file" id="customFile" />
                     <label class="custom-file-label" for="customFile">Choose file</label>
                 </div>
             </div>

@@ -2,7 +2,7 @@ package com.vbaslak.issuetracker.service;
 
 import com.vbaslak.issuetracker.domain.Role;
 import com.vbaslak.issuetracker.domain.User;
-import com.vbaslak.issuetracker.repos.UserRepository;
+import com.vbaslak.issuetracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -60,12 +60,13 @@ public class UserService implements UserDetailsService {
     }
 
     public void updateProfile(User user, String password) {
-        user.setPassword(passwordEncoder.encode(password));
         if (!StringUtils.isEmpty(password)){
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
         }
         userRepository.save(user);
     }
+
+
 
     public boolean addUser(User user) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
@@ -81,4 +82,5 @@ public class UserService implements UserDetailsService {
 
         return true;
     }
+
 }

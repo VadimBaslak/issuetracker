@@ -20,19 +20,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public String userList(Model model){
+    public String getUserList(Model model){
         model.addAttribute("users", userService.findAll());
         return "userList";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model) {
+    public String editFormUser(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         return "userEdit";
@@ -40,13 +37,12 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public String userSave(
+    public String saveUser(
             @RequestParam String username,
             @RequestParam Map<String, String> form,
             @RequestParam("userId") User user
     ) {
         userService.saveUser(user, username, form);
-
         return "redirect:/user";
     }
 
@@ -61,7 +57,7 @@ public class UserController {
             @AuthenticationPrincipal User user,
             @RequestParam String password
     ) {
-        userService.updateProfile(user, passwordEncoder.encode(password));
+        userService.updateProfile(user, password);
         return "redirect:/login";
     }
 }

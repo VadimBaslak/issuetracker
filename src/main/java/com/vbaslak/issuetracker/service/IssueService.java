@@ -16,10 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class IssueService {
+
     @Autowired
     private IssueRepository issueRepository;
     @Autowired
@@ -36,7 +38,11 @@ public class IssueService {
         }
     }
 
-    public void saveIssue(User user, Issue issue, MultipartFile file) throws IOException {
+    public List<Issue> getIssues(){
+        return issueRepository.findAll();
+    }
+
+    public Issue createIssue(User user, Issue issue, MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
@@ -51,14 +57,25 @@ public class IssueService {
         issue.setStartDate(new Date());
         issue.setStatus(Status.CREATED.getStatus());
         issueRepository.save(issue);
+        return issue;
     }
 
-    public void saveStatus(User user, Comment comment, Issue issue){
+    public void createIssueComment(User user, Comment comment, Issue issue){
         comment.setCommentAuthor(user);
         comment.setIssueWithComments(issue);
         comment.setDateComment(new Date());
         issue.setStatus(comment.getStatus());
         issueRepository.save(issue);
         commentRepository.save(comment);
+    }
+
+    public Issue updateIssueName(Issue issue, String issueName) {
+        issue.setIssueName(issueName);
+        issueRepository.save(issue);
+        return issue;
+    }
+
+    public void delete(Issue issue) {
+        issueRepository.delete(issue);
     }
 }

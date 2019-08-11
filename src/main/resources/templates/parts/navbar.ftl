@@ -13,7 +13,7 @@
                 <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/issueList">Issue list</a>
+                <a class="nav-link" href="/issue">Issue list</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/newIssue">New issue</a>

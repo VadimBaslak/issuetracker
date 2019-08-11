@@ -1,5 +1,7 @@
 package com.vbaslak.issuetracker.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -9,28 +11,41 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table
 public class Issue{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.IssueId.class)
     private Long id;
 
     @NotBlank(message = "Please fill the Issue name")
     @Length(max = 255, message = "description too long (more than 255)")
+    @JsonView(Views.IssueName.class)
     private String issueName;
+
     @NotBlank(message = "Please fill the description")
     @Length(max = 2048, message = "description too long (more than 2kB)")
+    @JsonView(Views.IssueDescription.class)
     private String description;
-    private Date startDate;
-    private String status;
 
+    @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonView(Views.IssueStartDate.class)
+    private Date startDate;
+
+    @JsonView(Views.IssueStatus.class)
+    private String status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonView(Views.IssueAuthor.class)
     private User author;
 
+    @JsonView(Views.IssueFileName.class)
     private String filename;
 
     @OneToMany(mappedBy = "issueWithComments", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonView(Views.IssueComments.class)
     private Set<Comment> comments;
 
     public Issue() {}
@@ -49,8 +64,12 @@ public class Issue{
         return Objects.hash(id);
     }
 
-    public String getAuthorName(){
-        return author != null ? author.getUsername() : "<none>";
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Issue issue = (Issue) o;
+        return id.equals(issue.id);
     }
 
     public Long getId() {
@@ -116,4 +135,5 @@ public class Issue{
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
+
 }

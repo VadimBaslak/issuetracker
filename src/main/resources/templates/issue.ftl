@@ -5,7 +5,7 @@
 <@c.page>
     <div class="form-row">
         <div class="form-group col-md-6">
-            <form method="get" action="/issueList" class="form-inline">
+            <form method="get" action="/issue" class="form-inline">
                 <div class="navbar-text"><input type="text" name="filter" class="form-control" value="${filter?ifExists}" placeholder="Search by issue name"></div>
                 <button type="submit" class="btn btn-primary ml-2">Search</button>
             </form>

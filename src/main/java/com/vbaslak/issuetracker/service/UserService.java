@@ -1,5 +1,6 @@
 package com.vbaslak.issuetracker.service;
 
+import com.vbaslak.issuetracker.api.exception.NotFoundException;
 import com.vbaslak.issuetracker.domain.Role;
 import com.vbaslak.issuetracker.domain.User;
 import com.vbaslak.issuetracker.repository.UserRepository;
@@ -63,10 +64,9 @@ public class UserService implements UserDetailsService {
         if (!StringUtils.isEmpty(password)){
             user.setPassword(passwordEncoder.encode(password));
         }
+
         userRepository.save(user);
     }
-
-
 
     public boolean addUser(User user) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
@@ -81,6 +81,14 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         return true;
+    }
+
+    public User addUserRest(String username, String password) {
+        User user = new User(username, password);
+        if (addUser(user)) {
+            return user;
+        }
+        throw new NotFoundException();
     }
 
 }

@@ -6,7 +6,6 @@ import com.vbaslak.issuetracker.domain.Status;
 import com.vbaslak.issuetracker.domain.User;
 import com.vbaslak.issuetracker.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,49 +29,22 @@ public class IssueController {
     @Autowired
     private IssueService issueService;
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
     @GetMapping("/")
     public String homePage() {
         return "homePage";
     }
 
-    @GetMapping("/issueList")
-    public String issueList(
+    @GetMapping("/issue")
+    public String issue(
             @RequestParam(required = false, defaultValue = "") String filter,
             Model model,
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<Issue> page = issueService.getPageIssue(filter, pageable);
         model.addAttribute("page", page);
-        model.addAttribute("url", "/issueList");
+        model.addAttribute("url", "/issue");
         model.addAttribute("filter", filter);
-        return "issueList";
-    }
-
-    @GetMapping("/newIssue")
-    public String newIssue(){
-        return "newIssue";
-    }
-
-    @PostMapping("/newIssue")
-    public String createNewIssue(
-            @AuthenticationPrincipal User user,
-            @Valid Issue issue,
-            BindingResult bindingResult,
-            Model model,
-            @RequestParam("file") MultipartFile file
-    ) throws IOException {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
-            model.mergeAttributes(errorsMap);
-            model.addAttribute("issue", issue);
-            return "newIssue";
-        }
-        model.addAttribute("issue", null);
-        issueService.saveIssue(user, issue, file);
-        return "redirect:/issueList";
+        return "issue";
     }
 
     @GetMapping("/issue/{issue}")
@@ -88,8 +60,32 @@ public class IssueController {
         return "addCommentIssue";
     }
 
+    @GetMapping("/newIssue")
+    public String newIssue(){
+        return "newIssue";
+    }
+
+    @PostMapping("/newIssue")
+    public String createIssue(
+            @AuthenticationPrincipal User user,
+            @Valid Issue issue,
+            BindingResult bindingResult,
+            Model model,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("issue", issue);
+            return "newIssue";
+        }
+        model.addAttribute("issue", null);
+        issueService.createIssue(user, issue, file);
+        return "redirect:/issue";
+    }
+
     @PostMapping("/issue")
-    public String createIssueStatus(
+    public String createIssueComment(
             @AuthenticationPrincipal User user,
             @Valid Comment comment,
             BindingResult bindingResult,
@@ -101,7 +97,7 @@ public class IssueController {
             model.mergeAttributes(errors);
             return showIssueDetails(issue, model);
         }
-        issueService.saveStatus(user, comment, issue);
-        return "redirect:/issueList";
+        issueService.createIssueComment(user, comment, issue);
+        return "redirect:/issue";
     }
 }

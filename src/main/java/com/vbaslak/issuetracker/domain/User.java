@@ -1,11 +1,15 @@
 package com.vbaslak.issuetracker.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -13,22 +17,80 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.UserId.class)
     private Long id;
 
     @NotBlank(message = "Username cannot be empty")
+    @JsonView(Views.UserName.class)
     private String username;
+
     @NotBlank(message = "Password cannot be empty")
+    @JsonView(Views.UserPassword.class)
     private String password;
 
+    @JsonView(Views.UserActive.class)
     private boolean active;
 
+    @JsonView(Views.UserRoles.class)
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    public User() {
+    }
+
+    public User(@NotBlank(message = "Username cannot be empty") String username, @NotBlank(message = "Password cannot be empty") String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id);
+    }
+
+    @JsonIgnore
     public boolean isAdmin(){
         return roles.contains(Role.ADMIN);
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isEnabled() {
+        return isActive();
+    }
+
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
     }
 
     public Long getId() {
@@ -43,33 +105,8 @@ public class User implements UserDetails {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return isActive();
-    }
-
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
     }
 
     public String getPassword() {

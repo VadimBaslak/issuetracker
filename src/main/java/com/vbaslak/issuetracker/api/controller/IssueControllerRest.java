@@ -2,6 +2,7 @@ package com.vbaslak.issuetracker.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.vbaslak.issuetracker.api.exception.NotFoundException;
+import com.vbaslak.issuetracker.domain.Comment;
 import com.vbaslak.issuetracker.domain.Issue;
 import com.vbaslak.issuetracker.domain.User;
 import com.vbaslak.issuetracker.domain.Views;
@@ -35,21 +36,21 @@ public class IssueControllerRest {
         return issue;
     }
 
-    @PostMapping
+    @PostMapping("/newIssue")
     @JsonView(Views.BasicInformationIssue.class)
     public Issue createIssue (
             @AuthenticationPrincipal User user,
             @RequestBody String issueName,
-            @RequestBody String description
-            //@RequestBody MultipartFile file
+            @RequestBody String description,
+            @RequestBody MultipartFile file
     ) throws IOException {
         Issue issue = new Issue(issueName, user, description);
         return showIssueDetails(issueService.createIssue(user, issue, null));
     }
 
     @PutMapping("{id}")
-    public Issue updateIssueName(@PathVariable("id") Issue issueFromDb, @RequestBody String issueName) {
-        return issueService.updateIssueName(issueFromDb, issueName);
+    public Issue updateIssueName(@PathVariable("id") Issue issue, @RequestBody String issueName) {
+        return issueService.updateIssueName(issue, issueName);
     }
 
     @DeleteMapping("{id}")
@@ -57,4 +58,17 @@ public class IssueControllerRest {
         issueService.delete(issue);
     }
 
+    @PostMapping("/issue")
+    public String createIssueComment(
+            @AuthenticationPrincipal User user,
+            @RequestBody Issue issue,
+            @RequestBody String status,
+            @RequestBody String textComment
+    ){
+        Comment comment = new Comment();
+        comment.setStatus(status);
+        comment.setTextComment(textComment);
+        issueService.createIssueComment(user, comment, issue);
+        return "redirect:/issue";
+    }
 }
